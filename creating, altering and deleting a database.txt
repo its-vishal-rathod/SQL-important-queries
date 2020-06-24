@@ -1,0 +1,24 @@
+Creating a database :
+
+	create database DatabaseName
+	
+Dropping a database :
+
+	drop database DatabaseName
+	
+	# if database is in use by some other user 
+	
+	alter database DatabaseName set SINGLE_USER with rollback immediate
+	drop database DatabaseName
+	
+	# system databases cannot be dropped
+	# dropping a database deletes the .mdf and .ldf files
+	
+Altering a database :
+
+	alter database DatabaseName modify name = NewDatabaseName
+	
+	OR
+	
+	execute sp_renameDB 'DatabaseName', 'NewDatabaseName'
+	
