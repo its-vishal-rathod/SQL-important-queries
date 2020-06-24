@@ -1,0 +1,47 @@
+Creating a table :
+
+	create table TableName
+	(
+		ID int NOT NULL PRIMARY KEY,
+		ValueColumn nvarchar(50) NOT NULL,
+		ID2 int NOT NULL
+	)
+	
+Adding a foreign key constraint :
+	
+	alter table TableName
+	add constraint FK_Constraint_Name FOREIGN KEY(ID2) references OtherTableName(ID)
+	
+Adding a primary key constraint :
+
+	alter table TableName
+	add PRIMARY KEY(ID)
+	
+	OR
+	
+	alter table TableName
+	add constraint PK_Constraint_Name PRIMARY KEY(ID)
+	
+Dropping a constraint :
+
+	alter table TableName
+	drop constraint Constraint_Name
+	
+Altering a table :
+
+	Adding a column :
+		
+		alter table TableName
+		add ColumnName datatype
+		
+	Dropping a column :
+	
+		alter table TableName
+		drop column ColumnName
+		
+	Altering a column by changing it's datatype :
+	
+		alter table TableName
+		alter column ColumnName NewDataType
+		
+	
