@@ -1,0 +1,92 @@
+Select all rows  :
+
+	select * from Person
+	
+Select distinct rows :
+
+	# Below query will return only the distinct area codes from Person table
+	
+	select DISTINCT Area_code from Person
+	
+	# Below query will return distinct combination of First_name and Area_code For eg. if there are two rows with same First_name s and Area_code, it will return only one of them
+	
+	select DISTINCT First_name, Area_code from Person
+	
+Where clause operators :
+
+	# Equal operator
+	
+	select * from Person where Age = 18
+	
+	# Not equal operator
+	
+	select * from Person where Age != 18
+	
+	OR
+	
+	select * from Person where Age <> 18
+	
+	# Greater than operator
+	
+	select * from Person where Age > 18
+	
+	# Greater than or equal to operator
+	
+	select * from Person where Age >= 18
+	
+	# Less than operator
+	
+	select * from Person where Age < 18
+	
+	# Less than or equal to operator
+	
+	select * from Person where Age <= 18
+	
+	# IN operator (Specifies a list of values)
+	
+	select * from Person where Age IN(18,52,25)
+	
+	# BETWEEN operator (Specifies a range)
+	
+	select * from Person where Age BETWEEN 18 AND 55
+	
+	# LIKE operator (Specifies a pattern)
+	
+		# Email_id format
+		
+		select * from Person where Email_id LIKE '%@%'
+		
+		# Email_id with only one character before @
+		
+		select * from Person where Email_id LIKE '_@%'
+		
+		# Email_id with a format like P@G.com or Q@M.com
+		
+		select * from Person where Email_id LIKE '_@_.com'
+		
+		# All the rows who's First_name start with either A or P or X
+		
+		select * from Person where First_name LIKE '[APX]%'
+		
+		# All the rows who's First_name doesn't start with either A or P or X
+		
+		select * from Person where First_name LIKE '[^APX]%'
+		
+	# AND and OR operators and combination
+	
+	select * from Person where (Area_code = 66 OR Area_code = 68) AND Age > 22
+	
+	# TOP
+	
+	select TOP 2 * from Person
+	
+	OR 
+	
+	select TOP 1 Percent from Person
+	
+		# Find the row with highest age
+		
+		select TOP 1 * from Person ORDER BY Age DESC
+	
+	
+	
