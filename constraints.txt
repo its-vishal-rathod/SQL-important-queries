@@ -1,0 +1,102 @@
+Database Constraints
+
+Constraints are the rules enforced on data columns on table. These are used to limit the type of data that can go into a table. This ensures the accuracy and reliability of the data in the database.
+
+NOT NULL - Indicates that a column cannot store NULL value
+
+	create table Person
+	(
+		Person_id int,
+		First_name nvarchar(50) NOT NULL,
+		Last_name nvarchar(50) NOT NULL
+	)
+
+UNIQUE - Ensures that each row for a column must have a unique value
+
+	create table Person
+	(
+		Person_id int,
+		First_name nvarchar(50) NOT NULL,
+		Last_name nvarchar(50) NOT NULL,
+		Email_id nvarchar(50) UNIQUE
+	)
+
+PRIMARY KEY - A combination of a NOT NULL and UNIQUE. Ensures that a column (or combination of two or more columns) have a unique identity which helps to find a particular record in a table more easily and quickly
+
+	create table Person
+	(
+		Person_id int PRIMARY KEY,
+		First_name nvarchar(50) NOT NULL,
+		Last_name nvarchar(50) NOT NULL,
+		Email_id nvarchar(50) UNIQUE
+	)
+	
+	Primary key on alter table :
+	
+	alter table Person
+	add constraint Pk_Person_id PRIMARY KEY (Person_id)
+
+
+FOREIGN KEY - Ensure the referential integrity of the data in one table to match values in another table
+
+	create table Area
+	(
+		Area_code int Primary key,
+		Area_name nvarchar(50)
+	)
+	
+	create table Person
+	(
+		Person_id int PRIMARY KEY,
+		First_name nvarchar(50) NOT NULL,
+		Last_name nvarchar(50) NOT NULL,
+		Email_id nvarchar(50) UNIQUE,
+		Area_code int constraint Fk_AreaCode FOREIGN KEY references Area(Area_code)
+	)
+
+	Foreign key on alter table :
+	
+	alter table Person add constraint Fk_AreaCode
+	FOREIGN KEY (Area_code) references Area(Area_code)
+
+
+CHECK - Ensures that the value in a column meets a specific condition
+
+	create table Person
+	(
+		Person_id int PRIMARY KEY,
+		First_name nvarchar(50) NOT NULL,
+		Last_name nvarchar(50) NOT NULL,
+		Email_id nvarchar(50) UNIQUE,
+		Area_code int constraint Fk_AreaCode FOREIGN KEY references Area(Area_code),
+		Age int constraint Chk_Age CHECK(Age>=18)
+	)
+	
+	if check constraint's condition is not satisfied it gives a message like :
+	
+		Msg 547, Level 16, State 0, Line 25
+		The INSERT statement conflicted with the CHECK constraint "Chk_Age". The conflict occurred in database "Sample", table "dbo.Person", column 'Age'.
+		The statement has been terminated.
+	
+	check constraint on alter statement :
+	
+	alter table Person
+	add constraint Chk_Age CHECK(Age>=18)
+
+DEFAULT - Specifies a default value for a column
+
+	create table Person
+	(
+		Person_id int PRIMARY KEY,
+		First_name nvarchar(50) NOT NULL,
+		Last_name nvarchar(50) NOT NULL,
+		Email_id nvarchar(50) UNIQUE,
+		Area_code int constraint Fk_AreaCode FOREIGN KEY references Area(Area_code),
+		Age int constraint Chk_Age CHECK(Age>=18),
+		Gender varchar(1) constraint Df_Gender DEFAULT 'U' 
+	)
+	
+	default constraint can be added with an alter statement as well : 
+	
+	ALTER table Person
+	Add constraint DF_Gender DEFAULT 'U' for Gender
