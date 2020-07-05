@@ -1,0 +1,231 @@
+Joins :
+
+Types of joins :
+	CROSS JOIN
+	INNER JOIN
+	LEFT OUTER JOIN
+	RIGHT OUTER JOIN
+	FULL OUTER JOIN
+	SELF JOIN
+
+Consider the following tables for the examples given below :
+
+	tblPerson
+		PersonID	PersonName
+		1			Ram
+		2			Shyaam
+		3			Satyam
+		4			Sunderam
+
+	tblPOR
+		PersonID	POR
+		2			Marketing
+		3			Finance
+		5			Training
+
+
+CROSS JOIN :
+	# It returns all records where each row from the first table is combined with each row from the second table. It also means CROSS JOIN returns the Cartesian product of the sets of rows from the joined tables.
+	
+	select Person.Person.FirstName, Person.BusinessEntity.ModifiedDate 
+	from Person.Person CROSS JOIN Person.BusinessEntity
+	
+	# Cross joins are rarely used since it generates a lot of records. For eg. when two tables with 10 rows each are crossed joined, the result would give 10*10 = 100 records
+	
+	# Every other join type can degrade to cross join in case the join condition is always true for all records
+	
+INNER JOIN :
+	
+	select P.PersonID, P.PersonName, Q.POR
+	from tblPerson P INNER JOIN tblPOR Q
+	ON P.PersonID = Q.PersonID
+	
+	PersonID	PersonName 	POR
+	2			Shyaam		Marketing
+	3			Satyam		Finance
+	 
+OUTER JOIN :
+	OUTER JOIN extends the functionality of inner join by not only generation the matching rows from joined tables but also displays all rows form either or both joined tables.
+	
+	The column values is displayed as NULL for the unmatched rows of either or both tables.
+	
+	Types of Outer Joins :
+		LEFT OUTER JOIN: Returns all rows from the left table, and the matched rows from the right table
+		RIGHT OUTER JOIN: Returns all rows from the right table, and the matched rows from the left table
+		FULL OUTER JOIN: Returns all rows when there is a match in ONE of the tables
+	
+	LEFT OUTER JOIN :
+		
+		select P.PersonID, P.PersonName, Q.POR
+		from tblPerson P LEFT OUTER JOIN tblPOR Q
+		ON P.PersonID = Q.PersonID
+		
+		PersonID	PersonName 	POR
+		1			Ram			NULL
+		2			Shyaam		Marketing
+		3			Satyam		Finance
+		4			Sunderam	NULL
+		
+	RIGHT OUTER JOIN :
+	
+		select P.PersonID, P.PersonName, Q.POR
+		from tblPerson P RIGHT OUTER JOIN tblPOR Q
+		ON P.PersonID = Q.PersonID
+		
+		PersonID	PersonName 	POR
+		2			Shyaam		Marketing
+		3			Satyam		Finance
+		5			NULL		Training
+		
+	FULL OUTER JOIN :
+	
+		select P.PersonID, P.PersonName, Q.POR
+		from tblPerson P FULL OUTER JOIN tblPOR Q
+		ON P.PersonID = Q.PersonID
+		
+		PersonID	PersonName 	POR
+		1			Ram			NULL
+		2			Shyaam		Marketing
+		3			Satyam		Finance
+		4			Sunderam	NULL
+		5			NULL		Training
+	 
+SELF JOIN : 
+	A self join is a join in which a table is joined with itself (which is also called Unary relationships), especially when the table has a FOREIGN KEY which references its own PRIMARY KEY. 
+	
+	Consider the following example for self join :
+	
+	
+		PersonID	PersonName 	BuddyID
+		1			Ram			4
+		2			Shyaam		3
+		3			Satyam		1
+		4			Sunderam	2
+		
+	Here, BuddyID is a foreign key which references the same table's Primary key i.e. PersonID.
+	
+	select P.PersonName, Q.PersonName as BuddyName
+	from tblPerson P JOIN tblPerson Q
+	ON P.BuddyID = Q.PersonID
+	
+	
+		PersonName 	BuddyName
+		Ram			Sunderam
+		Shyaam		Satyam
+		Satyam		Ram
+		Sunderam	Shyaam
+	
+-----------------------------------------------------------------------------------------------
+ON clause Vs WHERE clause :
+
+	For INNER JOIN, it doesn't make much difference because both the queries using ON or WHERE returns the same result.
+	
+	For OUTER JOIN, it is important where one places additional conditions.
+	The additional condition in ON clause with Join condition generates different results than an additional condition in WHERE clause.
+	
+	WHERE clause is always executed after the table is joined.
+	
+	Example :
+	
+	Consider the tables above from the OUTER JOIN examples.
+	
+		select P.PersonID, P.PersonName, Q.POR
+		from tblPerson P LEFT OUTER JOIN tblPOR Q
+		ON 
+			P.PersonID = Q.PersonID
+			AND
+			P.Person LIKE 'Sh%'
+		
+		PersonID	PersonName 	POR
+		1			Ram			NULL
+		2			Shyaam		Marketing
+		3			Satyam		NULL
+		4			Sunderam	NULL
+		
+		
+		select P.PersonID, P.PersonName, Q.POR
+		from tblPerson P LEFT OUTER JOIN tblPOR Q
+		ON 
+			P.PersonID = Q.PersonID
+		WHERE
+			P.Person LIKE 'Sh%'
+		
+		PersonID	PersonName 	POR
+		2			Shyaam		Marketing
+
+
+-----------------------------------------------------------------------------------------------
+Set Operations :
+
+For the sake of examples let us consider the following two tables :
+
+Employee_CA :
+	EmployeeName
+	Adam
+	Joseph
+	Sara
+	
+Employee_NY :
+	EmployeeName
+	Adam
+	Ryan
+	Smith
+
+UNION - Combines the results of two or more Select statements. However it will eliminate duplicate rows from its result set.
+
+	SELECT EmployeeName
+	FROM Employee_CA
+	UNION
+	SELECT EmployeeName
+	FROM Employee_NY;
+	
+Result :
+	EmployeeName
+	Adam
+	Joseph
+	Sara
+	Ryan
+	Smith
+	
+UNION ALL - Similar to Union. But it also shows the duplicate rows.
+
+	SELECT EmployeeName
+	FROM Employee_CA
+	UNION ALL
+	SELECT EmployeeName
+	FROM Employee_NY;
+
+Result :
+	EmployeeName
+	Adam
+	Joseph
+	Sara
+	Adam
+	Ryan
+	Smith
+	
+INTERSECT - Combine two SELECT statements, but it only returns the records which are common from both SELECT statements.
+
+	SELECT EmployeeName
+	FROM Employee_CA
+	INTERSECT
+	SELECT EmployeeName
+	FROM Employee_NY;
+
+Result :
+	EmployeeName
+	Adam
+
+EXCEPT - Combines result of two Select statements and return only those result which belongs to first set of result.
+
+	SELECT EmployeeName
+	FROM Employee_CA
+	EXCEPT
+	SELECT EmployeeName
+	FROM Employee_NY;
+
+
+Result :
+	EmployeeName
+	Joseph
+	Sara
